@@ -50,12 +50,12 @@ namespace BulkyBookWeb.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Categories.Find(id); 
-            if(categoryFromDb == null)
+            var categoryFromDb = _db.Categories.Find(id);
+            if (categoryFromDb == null)
             {
                 return NotFound();
             }
-                return View(categoryFromDb);
+            return View(categoryFromDb);
         }
 
         [HttpPost]
@@ -74,6 +74,34 @@ namespace BulkyBookWeb.Controllers
                 return RedirectToAction("Index");
             }
             return View(obj);
+        }
+        //Get
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var categoryFromDb = _db.Categories.Find(id);
+            if (categoryFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(categoryFromDb);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePOST(int? id)
+        {
+            var deleteObj = _db.Categories.Find(id);
+            if(deleteObj == null)
+            {
+                return NotFound(); 
+            }
+            _db.Categories.Remove(deleteObj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
